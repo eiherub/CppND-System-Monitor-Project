@@ -31,7 +31,15 @@ float Process::CpuUtilization() const {
  } 
 
 // DONE: Return the command that generated this process
-string Process::Command() { return LinuxParser::Command(Pid()); }
+string Process::Command() { 
+  int const cmdlineMax{50};
+  string cmdline = LinuxParser::Command(Pid());
+  if (cmdline.size() > cmdlineMax){
+    cmdline.resize(cmdlineMax);
+    cmdline=cmdline +"...";
+  }
+
+  return  cmdline ;}
 
 // DONE: Return this process's memory utilization
 string Process::Ram()  { return LinuxParser::Ram(Pid()); }
@@ -40,10 +48,10 @@ string Process::Ram()  { return LinuxParser::Ram(Pid()); }
 string Process::User() { return LinuxParser::User(Pid()); }
 
 // DONE: Return the age of this process (in seconds)
-long int Process::UpTime() { return LinuxParser::UpTime(Pid()); }
+long int Process::UpTime() { return LinuxParser::UpTime() - LinuxParser::UpTime(Pid()); }
 
 // DONE: Overload the "less than" comparison operator for Process objects
 // REMOVE: [[maybe_unused]] once you define the function
 // bool Process::operator<(Process const& a[[maybe_unused]]) const { return true; }
 
-bool Process::operator>(Process const& a) const { return CpuUtilization() > a.CpuUtilization(); }
+bool Process::operator<(Process const& a) const { return a.CpuUtilization() < CpuUtilization(); }

@@ -13,11 +13,7 @@
 #include "process.h"
 #include "processor.h"
 
-using std::map;
-using std::set;
-using std::size_t;
-using std::string;
-using std::vector;
+using namespace std;
 
 // DONE: Return the system's CPU
 Processor& System::Cpu() { return cpu_; }
@@ -26,6 +22,7 @@ Processor& System::Cpu() { return cpu_; }
 vector<Process>& System::Processes() {
    
     vector<int> pids{LinuxParser::Pids()};
+
     processes_={} ;
     
     // create Set Container 
@@ -44,8 +41,8 @@ vector<Process>& System::Processes() {
     for (auto& process : processes_){
         process.CpuUtilization();
     }
-    // Sort process in Decending order overloading greater than > operator
-    std::sort(processes_.begin(), processes_.end(), std::greater<Process>());
+    // Sort process in Decending order overloading less than < operator
+    std::sort(processes_.begin(), processes_.end(), std::less<Process>());
     return processes_; 
     }
 
